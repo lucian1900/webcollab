@@ -17,4 +17,5 @@ class WebCollab(object):
             response = handler(request, **values)
         except HTTPException, e:
             response = e
+        
         return response(environ, start_response)
