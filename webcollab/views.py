@@ -11,7 +11,8 @@ if not os.path.isdir(tempdir):
 
 @expose('/')
 def index(request):
-    return Response('index')
+    listdir = '\n'.join(os.listdir(tempdir))
+    return Response(listdir)
     
 @expose('/<string:name>')
 def message(request, name):
@@ -33,6 +34,13 @@ def message(request, name):
             open(path, 'w').write(request.form['message'])
         except IOError, e:
             raise BadRequest()
+            
+            
+    elif request.method == 'DELETE':
+        try:
+            os.remove(path)
+        except IOError, e:
+            raise NotFound()
             
     else:
         raise MethodNotAllowed()
