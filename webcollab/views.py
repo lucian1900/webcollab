@@ -4,20 +4,17 @@ from werkzeug import Response
 from werkzeug.exceptions import NotFound, BadRequest, MethodNotAllowed
 
 from webcollab.utils import expose
+from webcollab.utils import datadir
 
-tempdir = '/tmp/webcollab'
-if not os.path.isdir(tempdir):
-    os.mkdir(tempdir)
-
-@expose('/')
+@expose('/messages/')
 def index(request):
-    listdir = '\n'.join(os.listdir(tempdir))
+    listdir = '\n'.join(os.listdir(datadir))
     return Response(listdir)
     
-@expose('/<string:name>')
+@expose('/messages/<string:name>')
 def message(request, name):
     response = Response()
-    path = os.path.join(tempdir, str(name))
+    path = os.path.join(datadir, str(name))
     
     if request.method == 'HEAD':
         pass # we only need to return headers
@@ -31,6 +28,7 @@ def message(request, name):
                 
     elif request.method == 'POST':
         try:
+            print request.form['message']
             open(path, 'w').write(request.form['message'])
         except IOError, e:
             raise BadRequest()

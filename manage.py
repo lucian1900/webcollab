@@ -1,9 +1,15 @@
 #!/usr/bin/env python
+import os
+
 from werkzeug import script
 
 def make_app():
+    from werkzeug import SharedDataMiddleware
+    
     from webcollab.app import WebCollab
-    return WebCollab()
+    from webcollab.utils import datadir
+    
+    return SharedDataMiddleware(WebCollab(), {'/':  os.path.dirname(__file__)})
 
 def make_shell():
     from webcollab import utils

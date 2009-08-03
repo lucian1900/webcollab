@@ -1,3 +1,5 @@
+import os
+
 from werkzeug.routing import Map, Rule
 
 url_map = Map()
@@ -7,3 +9,7 @@ def expose(rule, **kw):
         url_map.add(Rule(rule, **kw))
         return f
     return decorate
+
+datadir = '/tmp/webcollab'
+if not os.path.isdir(datadir):
+    os.mkdir(datadir)

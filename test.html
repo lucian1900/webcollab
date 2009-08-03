@@ -1,0 +1,52 @@
+<html>
+<head>
+
+<script type='text/javascript'>
+function post(url, data){
+    x = new XMLHttpRequest()
+    x.onreadystatechange = function(){
+        console.log(x.responseText)
+    }
+    
+    x.open('POST', 'http://localhost:5000/messages/'+url, true)
+    x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+    x.send('message='+data)
+}
+
+function xhr(method, url, cb){
+    x = new XMLHttpRequest()
+    x.onreadystatechange = function() {
+        console.log(x.responseText)
+        cb(x.responseText)
+    }
+    x.open(method, 'http://localhost:5000/messages/'+url, true)
+    x.send(null)
+}
+
+function send(){    
+    post('test', document.forms[0].childNodes[1].value)
+    
+    return false
+}
+
+window.onload = function(){
+    polling = setInterval(function(){poll()}, 1000)
+}
+
+function poll(){
+    xhr('GET', 'test', function(text) {
+        var pre = document.getElementById('log')
+        pre.innerHTML = text
+    })
+}
+</script>
+</head>
+
+<body>
+    <pre id='log'>
+        
+    </pre>
+    <form onsubmit='return send()'>
+        <input id='textbox' type='text' />
+    </form>
+    
