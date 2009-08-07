@@ -11,7 +11,7 @@ def index(request):
     listdir = '\n'.join(os.listdir(datadir))
     return Response(listdir)
     
-@expose('/messages/<string:name>')
+@expose('/messages/<string:target>/<string:name>')
 def message(request, name):
     response = Response()
     path = os.path.join(datadir, str(name))
@@ -39,7 +39,7 @@ def message(request, name):
             os.remove(path)
         except IOError, e:
             raise NotFound()
-            
+
     else:
         raise MethodNotAllowed()
     

@@ -13,28 +13,35 @@ function post(url, data){
     x.send('message='+data)
 }
 
-function xhr(method, url, cb){
+function xhr(method, url, data, cb){
     x = new XMLHttpRequest()
     x.onreadystatechange = function() {
-        console.log(x.responseText)
         cb(x.responseText)
     }
+    
     x.open(method, 'http://localhost:5000/messages/'+url, true)
-    x.send(null)
+    
+    if(method == 'POST'){
+        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+        data = 'message='+data
+    }
+    
+    x.send(data)
+    
 }
 
 function send(){    
-    post('test', document.forms[0].childNodes[1].value)
+    xhr('POST', 'test', document.forms[0].childNodes[1].value)
     
     return false
 }
 
 window.onload = function(){
-    polling = setInterval(function(){poll()}, 1000)
+    polling = setInterval(function(){poll()}, 2000)
 }
 
 function poll(){
-    xhr('GET', 'test', function(text) {
+    xhr('GET', 'test', null, function(text) {
         var pre = document.getElementById('log')
         pre.innerHTML = text
     })
